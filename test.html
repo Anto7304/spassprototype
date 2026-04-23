@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smash&Heal · Mental Wellness</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        :root {
+            --primary: #2b7a3e;
+            --primary-light: #4caf6f;
+            --primary-dark: #1e562b;
+            --secondary: #f5b042;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-300: #d1d5db;
+            --gray-600: #6b7280;
+            --gray-800: #1f2937;
+            --red-500: #ef4444;
+            --shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.02);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+        body {
+            background: #edf2ec;
+            color: var(--gray-800);
+        }
+        /* navigation */
+        .navbar {
+            background: white;
+            box-shadow: var(--shadow);
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .logo i { font-size: 1.8rem; color: var(--primary); }
+        .logo span:first-child { color: var(--primary-dark); }
+        .logo span:last-child { color: var(--primary); }
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .btn-outline {
+            border: 1px solid var(--primary);
+            background: transparent;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-outline:hover { background: var(--primary); color: white; }
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-primary:hover { background: var(--primary-dark); transform: scale(0.97);}
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+        .card {
+            background: white;
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 16px;
+            font-size: 0.95rem;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            ring: 2px solid var(--primary-light);
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .badge {
+            background: var(--gray-100);
+            padding: 0.25rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+        }
+        .session-card {
+            border-left: 4px solid var(--primary);
+            background: var(--gray-50);
+            padding: 1rem;
+            border-radius: 20px;
+            margin-bottom: 0.8rem;
+        }
+        .chat-container {
+            height: 350px;
+            overflow-y: auto;
+            background: #fefcf5;
+            border-radius: 24px;
+            padding: 1rem;
+            border: 1px solid var(--gray-300);
+        }
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.6rem;
+        }
+        .message.client {
+            justify-content: flex-end;
+        }
+        .message.client .bubble {
+            background: var(--primary);
+            color: white;
+            border-radius: 20px 20px 4px 20px;
+        }
+        .message.counsellor .bubble {
+            background: #e9ecef;
+            color: #1f2937;
+            border-radius: 20px 20px 20px 4px;
+        }
+        .bubble {
+            max-width: 75%;
+            padding: 0.7rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .mt-4 { margin-top: 1.5rem; }
+        .text-center { text-align: center; }
+        .text-sm { font-size: 0.85rem; color: var(--gray-600); }
+        .hidden { display: none; }
+        .alert {
+            background: #dff0e6;
+            border-radius: 18px;
+            padding: 0.8rem;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+        }
+        hr { margin: 1rem 0; }
+        @media (max-width: 760px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .navbar { flex-direction: column; gap: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- navigation (dynamic) -->
+<div class="navbar" id="navbar">
+    <div class="logo">
+        <i class="fas fa-leaf"></i>
+        <span>Smash</span><span>&</span><span>Heal</span>
+    </div>
+    <div class="nav-buttons" id="navAuthButtons">
+        <!-- filled by js -->
+    </div>
+</div>
+
+<div class="container" id="appRoot">
+    <!-- dynamic views: login, client flow, peer dashboard, uni dashboard -->
+</div>
+
+<script>
+    // ---------- MOCK DATABASE (dummy data) ----------
+    let dummyUsers = [
+        { id: "u1", fullName: "Alex Kamau", email: "client@example.com", password: "123", role: "client", phone: "0712345678", ageRange: "18-25", year: "2nd Year", consentGiven: true, intakeCompleted: false, booking: null, sessionConfirmed: null, chatMessages: [] },
+        { id: "u2", fullName: "Peer Counsellor Jane", email: "peer@smash.com", password: "peer123", role: "peer_counsellor", assessmentForms: [], referralsMade: [] },
+        { id: "u3", fullName: "Dr. University Counsellor", email: "uni@smash.com", password: "uni123", role: "uni_counsellor", referredClients: [] }
+    ];
+    let sessionsStore = []; // { clientId, scheduledTime, status, meetingLink }
+    let activeChats = {};   // clientId -> messages array
+    let assessments = [];    // peer assessments
+
+    let currentUser = null;  // logged user
+
+    // helper: save to localStorage simulation
+    function persistMock() {
+        localStorage.setItem("smash_users", JSON.stringify(dummyUsers));
+        localStorage.setItem("smash_sessions", JSON.stringify(sessionsStore));
+        localStorage.setItem("smash_chats", JSON.stringify(activeChats));
+        localStorage.setItem("smash_assessments", JSON.stringify(assessments));
+    }
+    function loadMock() {
+        let u = localStorage.getItem("smash_users");
+        let s = localStorage.getItem("smash_sessions");
+        let c = localStorage.getItem("smash_chats");
+        let a = localStorage.getItem("smash_assessments");
+        if(u) dummyUsers = JSON.parse(u);
+        if(s) sessionsStore = JSON.parse(s);
+        if(c) activeChats = JSON.parse(c);
+        if(a) assessments = JSON.parse(a);
+    }
+    loadMock();
+
+    function saveAll() { persistMock(); }
+
+    // auth helpers
+    function login(email, password) {
+        let user = dummyUsers.find(u => u.email === email && u.password === password);
+        if(user) {
+            currentUser = { ...user };
+            localStorage.setItem("smash_current", JSON.stringify({id: user.id, role: user.role}));
+            return true;
+        }
+        return false;
+    }
+    function logout() {
+        currentUser = null;
+        localStorage.removeItem("smash_current");
+        renderApp();
+    }
+    function checkAutoLogin() {
+        let saved = localStorage.getItem("smash_current");
+        if(saved) {
+            let {id} = JSON.parse(saved);
+            let user = dummyUsers.find(u => u.id === id);
+            if(user) currentUser = { ...user };
+        }
+        renderApp();
+    }
+
+    // ---------- UI RENDER ----------
+    function renderApp() {
+        const root = document.getElementById("appRoot");
+        const navBtns = document.getElementById("navAuthButtons");
+        if(!currentUser) {
+            navBtns.innerHTML = `<button class="btn-outline" onclick="showLogin()">Login</button>
+                                 <button class="btn-primary" onclick="showRegister()">Sign Up</button>`;
+            root.innerHTML = getLoginRegisterView();
+        } else {
+            // logged in nav
+            navBtns.innerHTML = `<span class="badge">👋 ${currentUser.fullName} (${currentUser.role === 'client' ? 'Client' : currentUser.role === 'peer_counsellor' ? 'Peer Counsellor' : 'Uni Counsellor'})</span>
+                                 <button class="btn-outline" onclick="logout()">Logout</button>`;
+            if(currentUser.role === 'client') renderClientDashboard(root);
+            else if(currentUser.role === 'peer_counsellor') renderPeerDashboard(root);
+            else if(currentUser.role === 'uni_counsellor') renderUniDashboard(root);
+        }
+    }
+
+    function getLoginRegisterView() {
+        return `
+        <div class="card" style="max-width:500px; margin:2rem auto;">
+            <h2 style="margin-bottom:1rem;">Welcome back</h2>
+            <div id="loginFormView">
+                <div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="client@example.com"></div>
+                <div class="form-group"><label>Password</label><input type="password" id="loginPassword" placeholder="123 / peer123 / uni123"></div>
+                <button class="btn-primary" style="width:100%" onclick="performLogin()">Login</button>
+                <p class="text-center mt-4">Demo: client@example.com / 123 &nbsp;|&nbsp; peer@smash.com / peer123 &nbsp;|&nbsp; uni@smash.com / uni123</p>
+                <p class="text-center"><a href="#" onclick="showRegister();return false;">Create account</a></p>
+            </div>
+            <div id="registerFormView" style="display:none">
+                <div class="form-group"><label>Full name</label><input id="regName"></div>
+                <div class="form-group"><label>Email</label><input id="regEmail"></div>
+                <div class="form-group"><label>Password</label><input type="password" id="regPassword"></div>
+                <div class="form-group"><label>Phone</label><input id="regPhone"></div>
+                <button class="btn-primary" style="width:100%" onclick="performRegister()">Sign Up as Client</button>
+                <p class="text-center mt-4"><a href="#" onclick="showLogin();return false;">Back to login</a></p>
+            </div>
+        </div>`;
+    }
+
+    window.showLogin = () => {
+        document.getElementById("loginFormView").style.display = "block";
+        document.getElementById("registerFormView").style.display = "none";
+    };
+    window.showRegister = () => {
+        document.getElementById("loginFormView").style.display = "none";
+        document.getElementById("registerFormView").style.display = "block";
+    };
+    window.performLogin = () => {
+        let email = document.getElementById("loginEmail").value;
+        let pwd = document.getElementById("loginPassword").value;
+        if(login(email, pwd)) renderApp();
+        else alert("Invalid credentials. Use demo accounts");
+    };
+    window.performRegister = () => {
+        let name = document.getElementById("regName").value;
+        let email = document.getElementById("regEmail").value;
+        let pwd = document.getElementById("regPassword").value;
+        let phone = document.getElementById("regPhone").value;
+        if(!name || !email || !pwd) return alert("Fill all fields");
+        let newId = "u" + Date.now();
+        let newUser = { id: newId, fullName: name, email, password: pwd, role: "client", phone, ageRange: "", year: "", consentGiven: false, intakeCompleted: false, booking: null, sessionConfirmed: null, chatMessages: [] };
+        dummyUsers.push(newUser);
+        saveAll();
+        alert("Account created! Please login.");
+        showLogin();
+    };
+
+    // ************ CLIENT FLOW ************
+    function renderClientDashboard(root) {
+        let client = currentUser;
+        // fetch latest client data from dummyUsers
+        let freshClient = dummyUsers.find(u => u.id === client.id);
+        if(!freshClient) return;
+        currentUser = freshClient;
+        client = freshClient;
+
+        if(!client.consentGiven) {
+            root.innerHTML = getConsentForm();
+            return;
+        }
+        if(!client.intakeCompleted) {
+            root.innerHTML = getIntakeForm(client);
+            return;
+        }
+        if(!client.booking) {
+            root.innerHTML = getBookingForm(client);
+            return;
+        }
+        if(client.sessionConfirmed && new Date(client.sessionConfirmed) > new Date()) {
+            // show waiting / chat if time reached
+            let now = new Date();
+            let meetingTime = new Date(client.sessionConfirmed);
+            let canChat = now >= meetingTime;
+            root.innerHTML = getSessionAndChatView(client, canChat);
+        } else if(client.sessionConfirmed && new Date(client.sessionConfirmed) <= new Date()) {
+            // session time passed or active
+            root.innerHTML = getSessionAndChatView(client, true);
+        } else {
+            root.innerHTML = `<div class="card"><h3>⏳ Waiting for confirmation</h3><p>Peer counsellor will confirm your session schedule soon.</p><button class="btn-outline" onclick="logout()">Logout</button></div>`;
+        }
+    }
+
+    function getConsentForm() {
+        return `
+        <div class="card" style="max-width:700px; margin:0 auto">
+            <h2><i class="fas fa-shield-alt"></i> Consent & Data Use Agreement</h2>
+            <p>I understand that the information I provide will be used solely by peer counsellors and university counsellors for mental wellness support. My data will be handled confidentially and only for coordination of care.</p>
+            <div class="alert">✅ By checking below, you agree that your data may be shared between peer counsellor and university counsellor for therapeutic purposes only.</div>
+            <label><input type="checkbox" id="consentCheckbox"> I consent to the collection and use of my information as described.</label>
+            <div class="mt-4"><button class="btn-primary" onclick="submitConsent()">I Agree & Continue</button></div>
+        </div>`;
+    }
+    window.submitConsent = () => {
+        let chk = document.getElementById("consentCheckbox");
+        if(!chk.checked) return alert("Please accept the consent form");
+        let idx = dummyUsers.findIndex(u => u.id === currentUser.id);
+        if(idx !== -1) dummyUsers[idx].consentGiven = true;
+        saveAll();
+        currentUser.consentGiven = true;
+        renderApp();
+    };
+
+    function getIntakeForm(client) {
+        return `
+        <div class="card">
+            <h2>Tell us about yourself</h2>
+            <div class="grid-2">
+                <div class="form-group"><label>Full name</label><input id="intakeName" value="${client.fullName || ''}"></div>
+                <div class="form-group"><label>Email</label><input id="intakeEmail" value="${client.email || ''}"></div>
+                <div class="form-group"><label>Phone number</label><input id="intakePhone" value="${client.phone || ''}"></div>
+                <div class="form-group"><label>Year of Study</label><select id="intakeYear"><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select></div>
+                <div class="form-group"><label>Age range</label><select id="intakeAgeRange"><option>18-24</option><option>25-30</option><option>31-40</option><option>40+</option></select></div>
+            </div>
+            <button class="btn-primary" onclick="saveIntake()">Save & Continue</button>
+        </div>`;
+    }
+    window.saveIntake = () => {
+        let name = document.getElementById("intakeName").value;
+        let email = document.getElementById("intakeEmail").value;
+        let phone = document.getElementById("intakePhone").value;
+        let year = document.getElementById("intakeYear").value;
+        let ageRange = document.getElementById("intakeAgeRange").value;
+        if(!name || !email) return alert("Name and email required");
+        let idx = dummyUsers.findIndex(u => u.id === currentUser.id);
+        if(idx !== -1) {
+            dummyUsers[idx].fullName = name;
+            dummyUsers[idx].email = email;
+            dummyUsers[idx].phone = phone;
+            dummyUsers[idx].year = year;
+            dummyUsers[idx].ageRange = ageRange;
+            dummyUsers[idx].intakeCompleted = true;
+        }
+        saveAll();
+        currentUser.intakeCompleted = true;
+        renderApp();
+    };
+
+    function getBookingForm(client) {
+        return `
+        <div class="card">
+            <h2>Book a session with a peer counsellor</h2>
+            <p>Select preferred date & time (dummy data – counsellor will confirm)</p>
+            <div class="form-group"><label>Preferred date</label><input type="date" id="prefDate"></div>
+            <div class="form-group"><label>Preferred time</label><input type="time" id="prefTime"></div>
+            <div class="form-group"><label>Brief concern (optional)</label><textarea id="concern" rows="2"></textarea></div>
+            <button class="btn-primary" onclick="requestBooking()">Request booking</button>
+        </div>`;
+    }
+    window.requestBooking = () => {
+        let date = document.getElementById("prefDate").value;
+        let time = document.getElementById("prefTime").value;
+        if(!date || !time) return alert("Select date and time");
+        let clientId = currentUser.id;
+        let bookingRequest = { clientId, requestedSlot: `${date} ${time}`, status: "pending" };
+        let idx = dummyUsers.findIndex(u => u.id === clientId);
+        if(idx !== -1) dummyUsers[idx].booking = bookingRequest;
+        saveAll();
+        currentUser.booking = bookingRequest;
+        renderApp();
+    };
+
+    function getSessionAndChatView(client, chatEnabled) {
+        let sessionTime = client.sessionConfirmed ? new Date(client.sessionConfirmed).toLocaleString() : "To be confirmed";
+        let chatHistory = activeChats[client.id] || [];
+        return `
+        <div class="grid-2">
+            <div class="card">
+                <h3><i class="fas fa-calendar-check"></i> Session details</h3>
+                <p><strong>Confirmed time:</strong> ${sessionTime}</p>
+                <p><strong>Status:</strong> ${chatEnabled ? "🟢 Ready to chat" : "⏳ Upcoming session"}</p>
+                ${chatEnabled ? `<div class="alert">Your session is active! Chat with your peer counsellor below.</div>` : `<div class="alert">Please wait until the scheduled time to start chatting.</div>`}
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-comments"></i> Live chat with counsellor</h3>
+                <div class="chat-container" id="chatMessagesBox">
+                    ${chatHistory.map(m => `<div class="message ${m.sender === 'client' ? 'client' : 'counsellor'}"><div class="bubble">${m.text}</div></div>`).join('')}
+                </div>
+                ${chatEnabled ? `<div class="flex-between mt-4"><input type="text" id="chatInput" placeholder="Type a message..." style="flex:1"><button class="btn-primary" style="margin-left:0.5rem" onclick="sendChatMessage()">Send</button></div>` : `<p class="text-sm">Chat will be enabled at session time.</p>`}
+            </div>
+        </div>
+        <button class="btn-outline" style="margin-top:1rem" onclick="logout()">Logout</button>
+        `;
+    }
+
+    window.sendChatMessage = () => {
+        let input = document.getElementById("chatInput");
+        let text = input.value.trim();
+        if(!text) return;
+        let clientId = currentUser.id;
+        if(!activeChats[clientId]) activeChats[clientId] = [];
+        activeChats[clientId].push({ sender: "client", text, timestamp: new Date() });
+        saveAll();
+        input.value = "";
+        renderApp(); // refresh chat
+        // auto reply mock (simulate peer response)
+        setTimeout(() => {
+            if(!activeChats[clientId]) activeChats[clientId] = [];
+            activeChats[clientId].push({ sender: "counsellor", text: "I'm here to listen. How are you feeling right now?", timestamp: new Date() });
+            saveAll();
+            renderApp();
+        }, 800);
+    };
+
+    // ************ PEER COUNSELLOR DASHBOARD ************
+    function renderPeerDashboard(root) {
+        let clients = dummyUsers.filter(u => u.role === 'client' && u.consentGiven);
+        let pendingBookings = clients.filter(c => c.booking && !c.sessionConfirmed);
+        let confirmedSessions = clients.filter(c => c.sessionConfirmed);
+        root.innerHTML = `
+        <div class="flex-between"><h2>👥 Peer Counsellor Dashboard</h2></div>
+        <div class="grid-2">
+            <div class="card"><h3>📌 Pending booking requests</h3>
+                ${pendingBookings.length === 0 ? '<p>No pending requests</p>' : pendingBookings.map(c => `<div class="session-card"><b>${c.fullName}</b> (${c.email})<br>Request: ${c.booking.requestedSlot}<br><button class="btn-primary" style="margin-top:8px" onclick="confirmSession('${c.id}')">Confirm schedule</button></div>`).join('')}
+            </div>
+            <div class="card"><h3>✅ Active / confirmed clients</h3>
+                ${confirmedSessions.map(c => `<div class="session-card"><b>${c.fullName}</b> | Session: ${new Date(c.sessionConfirmed).toLocaleString()}<br><button class="btn-outline" onclick="openAssessmentForm('${c.id}')">Fill Assessment & Follow-up</button> <button class="btn-outline" onclick="referToUni('${c.id}')">Refer to Uni Counsellor</button></div>`).join('')}
+            </div>
+        </div>
+        <div class="card"><h3>📋 Assessment records (only peer view)</h3>
+            ${assessments.length === 0 ? '<p>No assessments recorded yet.</p>' : assessments.map(a => `<div><b>Client: ${a.clientName}</b> - ${a.date}<br>Notes: ${a.notes}<br>Way forward: ${a.wayForward}</div><hr>`).join('')}
+        </div>`;
+    }
+
+    window.confirmSession = (clientId) => {
+        let dateTime = prompt("Set session date & time (ISO format, e.g., 2026-04-25T14:00:00)");
+        if(dateTime) {
+            let idx = dummyUsers.findIndex(u => u.id === clientId);
+            if(idx !== -1) {
+                dummyUsers[idx].sessionConfirmed = new Date(dateTime).toISOString();
+                if(!activeChats[clientId]) activeChats[clientId] = [];
+            }
+            saveAll();
+            renderApp();
+        }
+    };
+    window.openAssessmentForm = (clientId) => {
+        let client = dummyUsers.find(u => u.id === clientId);
+        if(!client) return;
+        let notes = prompt("Assessment notes (issues observed):");
+        let way = prompt("Way forward / recommendations for client:");
+        if(notes && way) {
+            assessments.push({ clientId, clientName: client.fullName, notes, wayForward: way, date: new Date().toLocaleString() });
+            saveAll();
+            alert("Assessment saved (peer record only)");
+            renderApp();
+        }
+    };
+    window.referToUni = (clientId) => {
+        let client = dummyUsers.find(u => u.id === clientId);
+        if(!client) return;
+        let uni = dummyUsers.find(u => u.role === "uni_counsellor");
+        if(uni) {
+            if(!uni.referredClients) uni.referredClients = [];
+            uni.referredClients.push({ clientId: client.id, clientName: client.fullName, clientData: { email: client.email, phone: client.phone, year: client.year, ageRange: client.ageRange, intakeNotes: "Referred by peer counsellor" }, referredAt: new Date() });
+            saveAll();
+            alert(`Client ${client.fullName} referred to University Counsellor.`);
+            renderApp();
+        } else alert("No university counsellor account exists (create one manually in mock)");
+    };
+
+    // ************ UNIVERSITY COUNSELLOR DASHBOARD ************
+    function renderUniDashboard(root) {
+        let uni = dummyUsers.find(u => u.id === currentUser.id);
+        let referredList = uni?.referredClients || [];
+        root.innerHTML = `
+        <div class="card"><h2>🎓 University Counsellor Portal</h2>
+        <p>Referred clients from peer counsellors – you can view full details and provide mental wellness support.</p></div>
+        <div class="card"><h3>📋 Referred client profiles</h3>
+        ${referredList.length === 0 ? "<p>No referrals yet.</p>" : referredList.map(ref => `
+            <div class="session-card">
+                <b>${ref.clientName}</b> (${ref.clientData.email})<br>
+                Phone: ${ref.clientData.phone} | Year: ${ref.clientData.year} | Age: ${ref.clientData.ageRange}<br>
+                <details><summary>View intake summary & help</summary>
+                <p>This student was referred for advanced mental wellness support. University counsellor can reach out via provided contact. </p>
+                <textarea id="uniNote_${ref.clientId}" placeholder="Add follow-up notes..."></textarea>
+                <button class="btn-primary" onclick="saveUniNote('${ref.clientId}')">Save note (mock)</button>
+                </details>
+            </div>
+        `).join('')}</div>`;
+    }
+    window.saveUniNote = (clientId) => {
+        alert("Note saved (simulated) – University counsellor can coordinate further.");
+    };
+
+    // helper for global chat sync
+    window.sendChatMessage = () => {
+        let input = document.getElementById("chatInput");
+        let text = input.value.trim();
+        if(!text || !currentUser) return;
+        let clientId = currentUser.id;
+        if(!activeChats[clientId]) activeChats[clientId] = [];
+        activeChats[clientId].push({ sender: "client", text, timestamp: new Date() });
+        saveAll();
+        input.value = "";
+        renderApp();
+        // simulate peer reply
+        setTimeout(() => {
+            let peer = dummyUsers.find(u => u.role === "peer_counsellor");
+            if(peer && activeChats[clientId]) {
+                activeChats[clientId].push({ sender: "counsellor", text: "Thank you for sharing. I'm listening. Let's work on this together.", timestamp: new Date() });
+                saveAll();
+                renderApp();
+            }
+        }, 1200);
+    };
+
+    checkAutoLogin();
+</script>
+</body>
+</html>
